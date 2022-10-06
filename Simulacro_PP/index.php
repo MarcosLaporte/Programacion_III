@@ -12,8 +12,6 @@ include_once "PizzaConsultar.php";
     echo $p->MostrarPizza() . "\n--------\n";
 } */
 
-// var_dump($pizzas);
-
 
 
 ?>

@@ -51,10 +51,6 @@ class Pizza{
         return $decode;
     }
 
-    /* public function MostrarPizza() {
-        return $this->_cantidad . ' pizza/s sabor ' . $this->_sabor . ' tipo ' . $this->_tipo . ' por $' . $this->_precio . "\n";
-    } */
-    
     public function Equals($pizza){
         return !strcasecmp($this->_tipo, $pizza->_tipo) && !strcasecmp($this->_sabor, $pizza->_sabor);
     }
