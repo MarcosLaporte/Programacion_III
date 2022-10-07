@@ -10,7 +10,7 @@ $_sabor = strtolower($_POST['sabor']);
 $_tipo = strtolower($_POST['tipo']);
 $str = "";
 
-Pizza::BuscarPizza(Pizza::LeerDatos(), new Pizza($_sabor, 1, $_tipo, 1)) != -1 ?
+Pizza::BuscarPizza(LeerDatos("Pizza.json"), new Pizza($_sabor, 1, $_tipo, 1)) != -1 ?
     $str="La pizza $_tipo de $_sabor existe en el stock.\n" : $str="No existe la pizza $_tipo de $_sabor.\n";
 
 echo $str;

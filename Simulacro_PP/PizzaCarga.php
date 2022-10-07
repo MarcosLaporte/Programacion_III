@@ -1,31 +1,23 @@
 <?php
 /*1B- PizzaCarga.php: (por GET)se ingresa Sabor, precio, Tipo (“molde” o “piedra”), cantidad( de unidades).
 
-Laporte Marcos*/
+Laporte Marcos */
 
 include_once "Pizza.php";
     
-$arrayPizzas = Pizza::LeerDatos();
-$arrayPizzas = Add($arrayPizzas);
-GuardarDatos($arrayPizzas);
+$arrayPizzas = LeerDatos("Pizza.json");
+$arrayPizzas = AddPizza($arrayPizzas);
+/* Se guardan los datos en en el archivo de texto Pizza.json, tomando un id autoincremental como identificador(emulado). */
+GuardarDatos($arrayPizzas, "Pizza.json");
 
 // FUNCIONES ----------------------------------------------------------------
 
-/* Se guardan los datos en en el archivo de texto Pizza.json, tomando un id autoincremental como identificador(emulado). */
-function GuardarDatos(array $datos){
-    $refArchivo = fopen("Pizza.json", "w+");
-    if($refArchivo){
-        fwrite($refArchivo, json_encode($datos));
-    }
-    
-    return fclose($refArchivo);
-}
-
 /* Sí el sabor y tipo ya existen , se actualiza el precio y se suma al stock existente. */
-function Add(array $arrayPizzas){
+function AddPizza(array $arrayPizzas){
     $pizza = new Pizza($_GET['sabor'], $_GET['precio'], $_GET['tipo'], $_GET['cantidad']);
     $auxArray = $arrayPizzas;
     $indexPizza = Pizza::BuscarPizza($arrayPizzas, $pizza);
+
     if($indexPizza != -1){
         $auxArray[$indexPizza]->_precio = $pizza->_precio;
         $auxArray[$indexPizza]->_cantidad += $pizza->_cantidad;

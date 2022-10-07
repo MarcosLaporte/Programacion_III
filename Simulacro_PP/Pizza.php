@@ -1,6 +1,8 @@
 <?php
 /* Laporte Marcos */
 
+include_once "ManejoArchivos.php";
+
 class Pizza{
     public int $_id;
     public string $_sabor;
@@ -10,15 +12,15 @@ class Pizza{
     
     #region Setters
     public function setID(){
-        $this->_id = count(Pizza::LeerDatos())+1;
+        $this->_id = count(LeerDatos("Pizza.json"))+1;
     }
-    public function setSabor($sabor){
+    public function setSabor(string $sabor){
         $this->_sabor = strtolower($sabor);
     }
-    public function setPrecio($precio){
+    public function setPrecio(float $precio){
         $precio <= 0 ? $this->_precio = 250 : $this->_precio = $precio;
     }
-    public function setTipo($tipo){
+    public function setTipo(string $tipo){
         $tipoLwr = strtolower($tipo);
         if($tipoLwr == "molde" || $tipoLwr == "piedra"){
             $this->_tipo = $tipoLwr;
@@ -26,29 +28,17 @@ class Pizza{
             random_int(0,1) == 0 ? $this->_tipo = "molde" : $this->_tipo = "piedra";
         }
     }
-    public function setCantidad($cantidad){
+    public function setCantidad(int $cantidad){
         $cantidad <= 0 ? $this->_cantidad = 1 : $this->_cantidad = $cantidad;
     }
     #endregion
 
-    public function __construct($sabor, $precio, $tipo, $cantidad){
+    public function __construct(string $sabor = 'muzza', float $precio, string $tipo, int $cantidad){
         $this->setID();
         $this->setSabor($sabor);
         $this->setPrecio($precio);
         $this->setTipo($tipo);
         $this->setCantidad($cantidad);
-    }
-
-    public static function LeerDatos(){
-        $refArchivo = fopen("Pizza.json", "a+");
-        
-        if($refArchivo){
-            $textoArchivo = fgets($refArchivo);
-            json_decode($textoArchivo, false) != null ? $decode = json_decode($textoArchivo, false) : $decode = array();
-        }
-        fclose($refArchivo);
-        
-        return $decode;
     }
 
     public function Equals($pizza){
