@@ -3,15 +3,16 @@
 
 Laporte Marcos*/
 
-include_once "PizzaCarga.php";
-include_once "PizzaConsultar.php";
 
-// $pizzas = Pizza::LeerDatos();
-
-/* foreach ($pizzas as $p){
-    echo $p->MostrarPizza() . "\n--------\n";
-} */
-
-
+switch($_SERVER['REQUEST_METHOD']){
+    case 'GET':
+        echo "Método GET\n";
+        include_once "PizzaCarga.php";
+        break;
+    case 'POST':
+        echo "Método POST\n";
+        include_once "PizzaConsultar.php";
+        break; 
+}
 
 ?>
