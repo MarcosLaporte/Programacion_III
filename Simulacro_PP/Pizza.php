@@ -54,5 +54,17 @@ class Pizza{
     public function Equals($pizza){
         return !strcasecmp($this->_tipo, $pizza->_tipo) && !strcasecmp($this->_sabor, $pizza->_sabor);
     }
+
+    public static function BuscarPizza(array $pizzasExistentes, Pizza $pizza){
+        $ret = -1;
+        foreach($pizzasExistentes as $pizzaE){
+            if($pizza->Equals($pizzaE)){
+                $ret = array_search($pizzaE, $pizzasExistentes);
+                break;
+            }
+        }
+
+        return $ret;
+    }
 }
 ?>

@@ -25,7 +25,7 @@ function GuardarDatos(array $datos){
 function Add(array $arrayPizzas){
     $pizza = new Pizza($_GET['sabor'], $_GET['precio'], $_GET['tipo'], $_GET['cantidad']);
     $auxArray = $arrayPizzas;
-    $indexPizza = BuscarPizza($arrayPizzas, $pizza);
+    $indexPizza = Pizza::BuscarPizza($arrayPizzas, $pizza);
     if($indexPizza != -1){
         $auxArray[$indexPizza]->_precio = $pizza->_precio;
         $auxArray[$indexPizza]->_cantidad += $pizza->_cantidad;
@@ -38,18 +38,6 @@ function Add(array $arrayPizzas){
     }
 
     return $auxArray;
-}
-
-function BuscarPizza(array $pizzasExistentes, Pizza $pizza){
-    $ret = -1;
-    foreach($pizzasExistentes as $pizzaE){
-        if($pizza->Equals($pizzaE)){
-            $ret = array_search($pizzaE, $pizzasExistentes);
-            break;
-        }
-    }
-
-    return $ret;
 }
 
 
