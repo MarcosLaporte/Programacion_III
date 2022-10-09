@@ -5,9 +5,9 @@ include_once "Venta.php";
 
 /* AltaVenta.php: (por POST)se recibe el email del usuario y el sabor,tipo y cantidad. */
 
-$arrayVentas = LeerDatos("Ventas.json");
-$arrayVentas = AddVenta(LeerDatos("Pizza.json"), $arrayVentas);
-GuardarDatos($arrayVentas, "Ventas.json");
+$arrayVentas = LeerDatosJSON("Ventas.json");
+$arrayVentas = AddVenta(LeerDatosJSON("Pizza.json"), $arrayVentas);
+GuardarDatosJSON($arrayVentas, "Ventas.json");
 
 /* Si el ítem existe en Pizza.json y hay stock, guardar en el archivo (con la fecha, número de pedido y id autoincremental) */
 
@@ -23,8 +23,9 @@ function AddVenta(array $arrayPizzas, array $arrayVentas){
             array_push($auxVentas, $venta);
             /* y se debe descontar la cantidad vendida del stock.*/
             $auxPizzas[$indexPizza]->_cantidad -= $_POST['cantidad'];
-            GuardarDatos($auxPizzas, "Pizza.json");
+            GuardarDatosJSON($auxPizzas, "Pizza.json");
             echo "Se realizó el pedido!\n";
+            $venta->GuardarImagen();
         }else{
             echo "No hay suficiente stock para realizar el pedido.\n";
         }

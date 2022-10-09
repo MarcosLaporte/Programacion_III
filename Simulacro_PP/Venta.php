@@ -14,10 +14,10 @@ class Venta{
 
     #region Setter
     public function setNumeroPedido(){
-        $this->_numeroPedido = Venta::NuevoNumPedido(LeerDatos("Ventas.json"));
+        $this->_numeroPedido = Venta::NuevoNumPedido(LeerDatosJSON("Ventas.json"));
     }
     public function setID(){
-        $this->_id = count(LeerDatos("Ventas.json"))+1;
+        $this->_id = count(LeerDatosJSON("Ventas.json"))+1;
     }
     public function setMail(string $mail){
         $auxMail = strtolower($mail);
@@ -89,8 +89,24 @@ class Venta{
 
         return $numero;
     }
+    
+    public function GuardarImagen(){
+        $mailSeparado = explode("@", $this->_mailUsuario);       
+        $archivo = $this->_tipoPizza . '_' . $this->_saborPizza . '_' . $mailSeparado[0] . '_' . $this->_fechaPedido;
+        $destino = "ImagenesDeLaVenta/" . $archivo . ".png";
+        $tmpName = $_FILES["imagen"]["tmp_name"];
+        $ret = false;
+
+        if (move_uploaded_file($tmpName, $destino)) {
+            echo "La foto se guardó correctamente.\n";
+            $ret = true;
+        }else{
+            echo "La foto no pudo guardarse.\n";
+        }
+
+        return $ret;
+    }
+    
 }
-
-
-
+    
 ?>

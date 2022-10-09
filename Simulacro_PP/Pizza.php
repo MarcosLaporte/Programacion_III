@@ -12,7 +12,7 @@ class Pizza{
     
     #region Setters
     public function setID(){
-        $this->_id = count(LeerDatos("Pizza.json"))+1;
+        $this->_id = count(LeerDatosJSON("Pizza.json"))+1;
     }
     public function setSabor(string $sabor){
         $this->_sabor = strtolower($sabor);

@@ -1,6 +1,6 @@
 <?php
 
-function GuardarDatos(array $datos, string $nombreArchivo){
+function GuardarDatosJSON(array $datos, string $nombreArchivo){
     $refArchivo = fopen($nombreArchivo, "w+");
     if($refArchivo){
         fwrite($refArchivo, json_encode($datos));
@@ -9,7 +9,7 @@ function GuardarDatos(array $datos, string $nombreArchivo){
     return fclose($refArchivo);
 }
 
-function LeerDatos(string $nombreArchivo){
+function LeerDatosJSON(string $nombreArchivo){
     $refArchivo = fopen($nombreArchivo, "a+");
     
     if($refArchivo){

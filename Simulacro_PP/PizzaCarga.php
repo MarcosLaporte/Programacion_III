@@ -5,10 +5,10 @@ Laporte Marcos */
 
 include_once "Pizza.php";
     
-$arrayPizzas = LeerDatos("Pizza.json");
+$arrayPizzas = LeerDatosJSON("Pizza.json");
 $arrayPizzas = AddPizza($arrayPizzas);
 /* Se guardan los datos en en el archivo de texto Pizza.json, tomando un id autoincremental como identificador(emulado). */
-GuardarDatos($arrayPizzas, "Pizza.json");
+GuardarDatosJSON($arrayPizzas, "Pizza.json");
 
 // FUNCIONES ----------------------------------------------------------------
 
