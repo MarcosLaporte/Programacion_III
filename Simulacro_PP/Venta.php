@@ -93,7 +93,7 @@ class Venta{
     public function GuardarImagen(){
         $mailSeparado = explode("@", $this->_mailUsuario);       
         $archivo = $this->_tipoPizza . '_' . $this->_saborPizza . '_' . $mailSeparado[0] . '_' . $this->_fechaPedido;
-        $destino = "ImagenesDeLaVenta/" . $archivo . ".png";
+        $destino = "ImagenesDeLaVenta/" . $archivo . ".jpg";
         $tmpName = $_FILES["imagen"]["tmp_name"];
         $ret = false;
 
