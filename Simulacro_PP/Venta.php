@@ -91,6 +91,7 @@ class Venta{
     }
     
     public function GuardarImagen(){
+        is_dir(getcwd() . '/ImagenesDeLaVenta') ? : mkdir(getcwd() . '/ImagenesDeLaVenta');
         $mailSeparado = explode("@", $this->_mailUsuario);       
         $archivo = $this->_tipoPizza . '_' . $this->_saborPizza . '_' . $mailSeparado[0] . '_' . $this->_fechaPedido;
         $destino = "ImagenesDeLaVenta/" . $archivo . ".jpg";
