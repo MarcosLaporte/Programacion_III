@@ -28,6 +28,10 @@ switch ($_SERVER['REQUEST_METHOD']) {
         echo "Método PUT\n";
         include_once "ModificarVenta.php";
         break;
+        case 'DELETE':
+        echo "Método DELETE\n";
+        include_once "BorrarVenta.php";
+        break;
 }
 
 ?>
