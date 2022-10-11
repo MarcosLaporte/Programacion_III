@@ -76,7 +76,7 @@ echo __FILE__; //C:\xampp\htdocs\Programacion_III\TestGeneral.php
 echo dirname(__FILE__); //C:\xampp\htdocs\Programacion_III */
 ############################################################################
 
-is_dir(getcwd() . '/MisImagenes') ?: mkdir(getcwd() . '/MisImagenes');
+/* is_dir(getcwd() . '/MisImagenes') ?: mkdir(getcwd() . '/MisImagenes');
 $archivo = 'archivo';
 $destino = "MisImagenes/" . $archivo . ".jpg";
 $tmpName = $_FILES["imagen"]["tmp_name"];
@@ -85,6 +85,14 @@ if (move_uploaded_file($tmpName, $destino)) {
     echo "La foto se guardó correctamente.\n";
 } else {
     echo "La foto no pudo guardarse.\n";
-}
+} */
+############################################################################
+
+/* // var_dump(json_decode(file_get_contents("php://input"), true)); //Retorna NULL
+parse_str(file_get_contents("php://input"), $datos);
+// var_dump($datos);
+echo $datos['numero'] . "\n";
+echo $datos['letra']; */
+############################################################################
 
 ?>
