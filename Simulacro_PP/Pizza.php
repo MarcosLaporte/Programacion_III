@@ -29,7 +29,7 @@ class Pizza{
         }
     }
     public function setCantidad(int $cantidad){
-        $cantidad <= 0 ? $this->_cantidad = 1 : $this->_cantidad = $cantidad;
+        $cantidad < 0 ? $this->_cantidad = 0 : $this->_cantidad = $cantidad;
     }
     #endregion
 
@@ -52,6 +52,23 @@ class Pizza{
                 $ret = array_search($pizzaE, $pizzasExistentes);
                 break;
             }
+        }
+
+        return $ret;
+    }
+    
+    public function GuardarImagenPizza(){
+        is_dir(getcwd() . '/ImagenesDePizzas') ? : mkdir(getcwd() . '/ImagenesDePizzas');
+        $archivo = $this->_tipo . '_' . $this->_sabor;
+        $destino = "ImagenesDePizzas/" . $archivo . ".jpg";
+        $tmpName = $_FILES["imagen"]["tmp_name"];
+        $ret = false;
+
+        if (move_uploaded_file($tmpName, $destino)) {
+            echo "La foto se guardó correctamente.\n";
+            $ret = true;
+        }else{
+            echo "La foto no pudo guardarse.\n";
         }
 
         return $ret;
