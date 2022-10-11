@@ -20,11 +20,16 @@ function AddVenta(array $arrayPizzas, array $arrayVentas){
 
     if($indexPizza != -1){
         if($auxPizzas[$indexPizza]->_cantidad > 0){
-            $venta = new Venta($_POST['mail'], $pizzaPedido->_sabor, $pizzaPedido->_tipo, $pizzaPedido->_cantidad, $_POST['fechaPedido']);
+            if($auxPizzas[$indexPizza]->_cantidad - $_POST['cantidad'] > 0){
+                $cantidad = $pizzaPedido->_cantidad;
+            }else{
+                $cantidad = $auxPizzas[$indexPizza]->_cantidad;
+                echo "Tan solo tenemos " . $auxPizzas[$indexPizza]->_cantidad . "unidades de esa pizza\n";
+            }
+            $venta = new Venta($_POST['mail'], $pizzaPedido->_sabor, $pizzaPedido->_tipo, $cantidad, $_POST['fechaPedido']);
             array_push($auxVentas, $venta);
             /* y se debe descontar la cantidad vendida del stock.*/
-            $auxPizzas[$indexPizza]->_cantidad -= $_POST['cantidad'];
-            //TODO: verificar que el stock sea mayor que 0
+            $auxPizzas[$indexPizza]->_cantidad -= $cantidad;
             GuardarDatosJSON($auxPizzas, "Pizza.json");
             echo "Se realizó el pedido!\n";
             $venta->GuardarImagenVenta();
