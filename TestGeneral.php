@@ -49,8 +49,42 @@ echo MailValido('@.') ? "true<br>" : "false<br>"; */
 echo $fecha->format('d/m/Y'); */
 ############################################################################
 
-$fecha = DateTime::createFromFormat('d/m/Y', null) ?  : new DateTime('now');
-echo $fecha->format('d/m/Y');
+/* $fecha = DateTime::createFromFormat('d/m/Y', null) ?  : new DateTime('now');
+echo $fecha->format('d/m/Y'); */
 ############################################################################
+
+/* $fecha1 = new DateTime('now');
+$fecha2 = new DateTime('now');
+$fecha3 = new DateTime('now');
+var_dump($fecha1);
+echo "<br>";
+var_dump($fecha2);
+echo "<br>";
+var_dump($fecha3);
+echo "<br>"; */
+############################################################################
+
+/* // var_dump(new DateTime('today')>=new DateTime('today') && new DateTime('today')<=new DateTime('today'));
+var_dump(date_add(new DateTime('today'), date_interval_create_from_date_string("1 day")));
+// var_dump(date_add(new DateTime('today'), '1 day')); //No funciona
+// var_dump(new DateTime('today')); */
+############################################################################
+
+/* // is_dir('files_class/MiCarpeta') ? : mkdir('files_class/MiCarpeta');
+echo getcwd(); //C:\xampp\htdocs\Programacion_III
+echo __FILE__; //C:\xampp\htdocs\Programacion_III\TestGeneral.php
+echo dirname(__FILE__); //C:\xampp\htdocs\Programacion_III */
+############################################################################
+
+is_dir(getcwd() . '/MisImagenes') ?: mkdir(getcwd() . '/MisImagenes');
+$archivo = 'archivo';
+$destino = "MisImagenes/" . $archivo . ".jpg";
+$tmpName = $_FILES["imagen"]["tmp_name"];
+
+if (move_uploaded_file($tmpName, $destino)) {
+    echo "La foto se guardó correctamente.\n";
+} else {
+    echo "La foto no pudo guardarse.\n";
+}
 
 ?>
