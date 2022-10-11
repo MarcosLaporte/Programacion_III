@@ -2,6 +2,7 @@
 /*3A- Laporte Marcos */
 
 include_once "Venta.php";
+include_once "Pizza.php";
 
 /* AltaVenta.php: (por POST)se recibe el email del usuario y el sabor,tipo y cantidad. */
 
@@ -23,9 +24,10 @@ function AddVenta(array $arrayPizzas, array $arrayVentas){
             array_push($auxVentas, $venta);
             /* y se debe descontar la cantidad vendida del stock.*/
             $auxPizzas[$indexPizza]->_cantidad -= $_POST['cantidad'];
+            //TODO: verificar que el stock sea mayor que 0
             GuardarDatosJSON($auxPizzas, "Pizza.json");
             echo "Se realizó el pedido!\n";
-            $venta->GuardarImagen();
+            $venta->GuardarImagenVenta();
         }else{
             echo "No hay suficiente stock para realizar el pedido.\n";
         }

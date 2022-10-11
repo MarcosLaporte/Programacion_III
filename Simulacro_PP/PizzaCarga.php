@@ -14,10 +14,11 @@ GuardarDatosJSON($arrayPizzas, "Pizza.json");
 
 /* Sí el sabor y tipo ya existen , se actualiza el precio y se suma al stock existente. */
 function AddPizza(array $arrayPizzas){
-    $pizza = new Pizza($_GET['sabor'], $_GET['precio'], $_GET['tipo'], $_GET['cantidad']);
+    /* 5- PizzaCarga.php:.(continuación) Cambio de get a post. */
+    $pizza = new Pizza($_POST['sabor'], $_POST['precio'], $_POST['tipo'], $_POST['cantidad']);
     $auxArray = $arrayPizzas;
     $indexPizza = Pizza::BuscarPizza($arrayPizzas, $pizza);
-
+    
     if($indexPizza != -1){
         $auxArray[$indexPizza]->_precio = $pizza->_precio;
         $auxArray[$indexPizza]->_cantidad += $pizza->_cantidad;
@@ -28,9 +29,10 @@ function AddPizza(array $arrayPizzas){
         echo "Se agregó una pizza!:\n";
         echo $pizza->_cantidad . ' pizza/s sabor ' . $pizza->_sabor . ' tipo ' . $pizza->_tipo . ' por $' . $pizza->_precio . "\n";
     }
-
+    /* completar el alta con imagen de la pizza, guardando la imagen con el tipo y el sabor como nombre  en la carpeta /ImagenesDePizzas  */
+    $pizza->GuardarImagenPizza();
+    
     return $auxArray;
 }
-
 
 ?>
