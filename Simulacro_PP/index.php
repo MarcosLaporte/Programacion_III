@@ -3,23 +3,31 @@
 
 Laporte Marcos*/
 
-
-switch ($_POST['funcion']) {
-    case 'nuevaPizza':
-        include_once "PizzaCarga.php";
+switch ($_SERVER['REQUEST_METHOD']) {
+    case 'POST':
+        echo "Método POST\n";
+        switch ($_POST['funcion']) {
+            case '':
+                include_once "PizzaCarga.php";
+                break;
+            case 'nuevaVenta':
+                include_once "AltaVenta.php";
+                break;
+            case 'consultaPizzas':
+                include_once "PizzaConsultar.php";
+                break;
+            case 'consultaVentas':
+                include_once "ConsultasVentas.php";
+                break;
+            default:
+                echo "Error! Escoja una función válida:\n";
+                echo "~ nuevaPizza\n~ nuevaVenta\n~ consultaPizzas\n~ consultaVentas\n";
+        }
         break;
-    case 'nuevaVenta':
-        include_once "AltaVenta.php";
+    case 'PUT':
+        echo "Método PUT\n";
+        include_once "ModificarVenta.php";
         break;
-    case 'consultaPizzas':
-        include_once "PizzaConsultar.php";
-        break;
-    case 'consultaVentas':
-        include_once "ConsultasVentas.php";
-        break;
-    default:
-        echo "Error! Escoja una función válida:\n";
-        echo "~ consultaPizzas\n~ consultaVentas\n~ alta\n";
 }
 
 ?>

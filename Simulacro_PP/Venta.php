@@ -38,7 +38,7 @@ class Venta{
         $cantidad <= 0 ? $this->_cantidadPizza = 1 : $this->_cantidadPizza = $cantidad;
     }
     public function setFecha(string $strFecha){
-        $fecha = DateTime::createFromFormat('d-m-Y', $strFecha) ? : new DateTime('now');
+        $fecha = DateTime::createFromFormat('d-m-Y', $strFecha) ? $strFecha : new DateTime('now');
         $auxFecha = $fecha <= new DateTime('now') ? $fecha : new DateTime('now');
 
         $this->_fechaPedido = $auxFecha->format('d-m-Y');
@@ -107,7 +107,18 @@ class Venta{
 
         return $ret;
     }
-    
+
+    public static function BuscarVenta(array $ventasExistentes, $numeroPedido){
+        $ret = -1;
+        foreach($ventasExistentes as $ventaE){
+            if($ventaE->_numeroPedido == $numeroPedido){
+                $ret = array_search($ventaE, $ventasExistentes);
+                break;
+            }
+        }
+
+        return $ret;
+    }
 }
     
 ?>

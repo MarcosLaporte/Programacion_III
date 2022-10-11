@@ -16,8 +16,8 @@ $_ventasF1F2 = array();
 $_ventasUsuario = array();
 $_ventasSabor = array();
 
-$fechaInicio = DateTime::createFromFormat('d-m-Y', $_POST['fechaInicio']) ? : new DateTime('01-01-2022');
-$fechaFinal = DateTime::createFromFormat('d-m-Y', $_POST['fechaFinal']) ? : new DateTime('31-12-2022');
+$fechaInicio = DateTime::createFromFormat('d-m-Y', $_POST['fechaInicio']) ? $_POST['fechaInicio'] : new DateTime('01-01-2022');
+$fechaFinal = DateTime::createFromFormat('d-m-Y', $_POST['fechaFinal']) ? $_POST['fechaFinal'] : new DateTime('31-12-2022');
 if($fechaFinal < $fechaInicio){
     $auxFecha = $fechaInicio;
     $fechaInicio = $fechaFinal;
@@ -27,7 +27,7 @@ if($fechaFinal < $fechaInicio){
 $mail = Venta::MailValido($_POST['mail']) ? $_POST['mail'] : 'invalid_email';
 
 foreach ($_arrayVentas as $venta){
-    $fechaPedido = DateTime::createFromFormat('d-m-Y', $venta->_fechaPedido) ? : new DateTime('today');
+    $fechaPedido = DateTime::createFromFormat('d-m-Y', $venta->_fechaPedido) ? $venta->_fechaPedido : new DateTime('today');
     $_pizzasVendidas += $venta->_cantidadPizza;
     !callbackEntreDosFechas($fechaPedido, $fechaInicio, $fechaFinal) ? : array_push($_ventasF1F2, $venta);
     callbackVentaUsuario($venta, $mail) ? : array_push($_ventasUsuario, $venta);
