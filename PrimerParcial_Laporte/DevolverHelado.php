@@ -9,19 +9,35 @@ Laporte Marcos*/
 
 include_once "Venta.php";
 include_once "CuponDeDescuento.php";
+include_once "Devolucion.php";
 
 $_arrayVentas = LeerDatosJSON("ventas.json");
 $_arrayCupones = LeerDatosJSON("cupones.json");
+$_arrayDevoluciones = LeerDatosJSON("devoluciones.json");
 
-$indexVenta = Venta::BuscarVenta($_arrayVentas, $_POST['numeroDePedido']);
+$_numeroPedido = $_POST['numeroDePedido'];
+$indexVenta = Venta::BuscarVenta($_arrayVentas, $_numeroPedido);
+$indexDevolucion = Devolucion::BuscarDevolucion($_arrayDevoluciones, $_numeroPedido);
 
-if($indexVenta != -1){
-    CuponDeDescuento::GuardarImagenClienteEnojado($_arrayVentas[$indexVenta]);
-    echo "Queja anotada! Tome un cupón de descuento para su próxima compra:\n";
-    $cupon = new CuponDeDescuento();
-    array_push($_arrayCupones, $cupon);
-    GuardarDatosJSON($_arrayCupones, "cupones.json");
-    echo $cupon->MostrarCupon();
-}else{
+if ($indexVenta != -1) {
+    if ($indexDevolucion == -1) {
+        CuponDeDescuento::GuardarImagenClienteEnojado($_arrayVentas[$indexVenta]);
+
+        $cupon = new CuponDeDescuento($_POST['causa']);
+        array_push($_arrayCupones, $cupon);
+        GuardarDatosJSON($_arrayCupones, "cupones.json");
+
+        $devolucion = new Devolucion($cupon->_causa, $_numeroPedido, $cupon->_id);
+        array_push($_arrayDevoluciones, $devolucion);
+        GuardarDatosJSON($_arrayDevoluciones, "devoluciones.json");
+
+        echo "Queja anotada! Tome un cupón de descuento para su próxima compra:\n";
+        echo "---------------------------------\n";
+        echo $cupon->MostrarCupon();
+        echo "---------------------------------\n";
+    } else {
+        echo "Ya se realizó una devolución por esta venta!\n";
+    }
+} else {
     echo "No nos quiera cagar! Ese pedido no existe!\n";
 }

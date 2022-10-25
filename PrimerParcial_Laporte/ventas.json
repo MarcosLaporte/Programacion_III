@@ -1,1 +1,1 @@
-[{"_numeroPedido":4456,"_id":1,"_mailUsuario":"marcos@gmail.com","_saborHelado":"chocolate","_tipoHelado":"crema","_stockHelado":"5","_fechaPedido":"12-10-2022"}]
+[{"_numeroPedido":4456,"_id":1,"_mailUsuario":"marcos@gmail.com","_saborHelado":"chocolate","_tipoHelado":"crema","_stockHelado":5,"_fechaPedido":"12-10-2022"},{"_numeroPedido":7786,"_id":2,"_mailUsuario":"huguito@outlook.com","_saborHelado":"frutilla","_tipoHelado":"agua","_cantHelado":2,"_fechaPedido":"26-10-2022"}]
