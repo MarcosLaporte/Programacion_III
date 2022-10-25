@@ -9,7 +9,7 @@ class Venta{
     public string $_mailUsuario;
     public string $_saborHelado;
     public string $_tipoHelado;
-    public int $_stockHelado;
+    public int $_cantHelado;
     public string $_fechaPedido;
 
     #region Setter
@@ -31,11 +31,11 @@ class Venta{
         if($tipoLwr == "agua" || $tipoLwr == "crema"){
             $this->_tipoHelado = $tipoLwr;
         }else{
-            random_int(0,1) == 0 ? $this->_tipo = "agua" : $this->_tipo = "crema";
+            $this->_tipo = random_int(0,1) == 0 ? "agua" : "crema";
         }
     }
-    public function setCantidad(int $stock){
-        $stock <= 0 ? $this->_stockHelado = 1 : $this->_stockHelado = $stock;
+    public function setCantidad(int $cant){
+        $this->_cantHelado = $cant <= 0 ? 1 : $cant;
     }
     public function setFecha(string $strFecha){
         $fecha = DateTime::createFromFormat('d-m-Y', $strFecha) ? $strFecha : new DateTime('now');
@@ -45,13 +45,13 @@ class Venta{
     }
     #endregion
 
-    public function __construct($mailUsuario = 'defaultmail@utnfra.com', $saborHelado = 'chocolate', $tipoHelado, $stockHelado, string $fechaPedido = new DateTime('now')){
+    public function __construct($mailUsuario = 'defaultmail@utnfra.com', $saborHelado = 'chocolate', $tipoHelado, $cantHelado, string $fechaPedido = new DateTime('now')){
         $this->setNumeroPedido();
         $this->setID();
         $this->setMail($mailUsuario);
         $this->setSabor($saborHelado);
         $this->setTipo($tipoHelado);
-        $this->setCantidad($stockHelado);
+        $this->setCantidad($cantHelado);
         $this->setFecha($fechaPedido);
     }
 
@@ -109,14 +109,20 @@ class Venta{
     }
 
     public static function BuscarVenta(array $ventasExistentes, $numeroPedido){
-        $ret = -1;
+       /*  $ret = -1;
         foreach($ventasExistentes as $ventaE){
             if($ventaE->_numeroPedido == $numeroPedido){
                 $ret = array_search($ventaE, $ventasExistentes);
                 break;
             }
+        } */
+
+        for($i = 0; $i < count($ventasExistentes); $i++){
+            if($ventasExistentes[$i]->_numeroPedido == $numeroPedido){
+                return $i;
+            }
         }
 
-        return $ret;
+        return -1;
     }
 }

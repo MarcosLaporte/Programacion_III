@@ -13,7 +13,7 @@ class Helado{
         $this->_id = count(LeerDatosJSON("heladeria.json"))+1;
     }
     public function setSabor(string $sabor){
-        $this->_sabor = strtolower($sabor);
+        $this->_sabor = empty(trim($sabor)) ? "chocolate" : strtolower($sabor);
     }
     public function setPrecio(float $precio){
         $precio <= 0 ? $this->_precio = 250 : $this->_precio = $precio;
