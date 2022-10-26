@@ -7,7 +7,7 @@ carpeta /ImagenesDeHelados
 
 Laporte Marcos*/
 
-include_once "Helado.php";
+include_once "Clases\\Helado.php";
 
 $_arrayHelados = LeerDatosJSON("heladeria.json");
 $_arrayHelados = AddHelado($_arrayHelados);

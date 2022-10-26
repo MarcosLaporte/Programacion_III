@@ -7,27 +7,27 @@ estado[usado/no usadol]) con el 10% de descuento para la próxima compra.
 
 Laporte Marcos*/
 
-include_once "Venta.php";
-include_once "CuponDeDescuento.php";
-include_once "Devolucion.php";
+include_once "Clases\\Venta.php";
+include_once "Clases\\CuponDeDescuento.php";
+include_once "Clases\\Devolucion.php";
 
 $_arrayVentas = LeerDatosJSON("ventas.json");
 $_arrayCupones = LeerDatosJSON("cupones.json");
 $_arrayDevoluciones = LeerDatosJSON("devoluciones.json");
 
-$_numeroPedido = $_POST['numeroDePedido'];
-$indexVenta = Venta::BuscarVenta($_arrayVentas, $_numeroPedido);
-$indexDevolucion = Devolucion::BuscarDevolucion($_arrayDevoluciones, $_numeroPedido);
+$numPedido = empty($datos['numeroDePedido']) ? 0 : $datos['numeroDePedido'];
+$indexVenta = Venta::BuscarVenta($_arrayVentas, $numPedido);
+$indexDevolucion = Devolucion::BuscarDevolucion($_arrayDevoluciones, $numPedido);
 
 if ($indexVenta != -1) {
     if ($indexDevolucion == -1) {
-        CuponDeDescuento::GuardarImagenClienteEnojado($_arrayVentas[$indexVenta]);
+        echo CuponDeDescuento::GuardarImagenClienteEnojado($_arrayVentas[$indexVenta]) ? "La imagen fue guardada con éxito!\n" : "La imagen no pudo guardarse.\n";
 
         $cupon = new CuponDeDescuento($_POST['causa']);
         array_push($_arrayCupones, $cupon);
         GuardarDatosJSON($_arrayCupones, "cupones.json");
 
-        $devolucion = new Devolucion($cupon->_causa, $_numeroPedido, $cupon->_id);
+        $devolucion = new Devolucion($cupon->_causa, $numPedido, $cupon->_id);
         array_push($_arrayDevoluciones, $devolucion);
         GuardarDatosJSON($_arrayDevoluciones, "devoluciones.json");
 
@@ -39,5 +39,10 @@ if ($indexVenta != -1) {
         echo "Ya se realizó una devolución por esta venta!\n";
     }
 } else {
-    echo "No nos quiera cagar! Ese pedido no existe!\n";
+    echo "No existe una venta activa con número de pedido N°$numPedido.\n";
+    echo "Los disponibles son:\n";
+    foreach ($arrayVentas as $venta) {
+        if($venta->_activo)
+            echo '~ ' . $venta->_numeroPedido . "\n";
+    }
 }
