@@ -1,0 +1,1 @@
+[{"_id":1,"_sabor":"kiwi","_precio":200,"_tipo":"agua","_stock":100},{"_id":2,"_sabor":"chocolate","_precio":300,"_tipo":"crema","_stock":190},{"_id":3,"_sabor":"vainilla","_precio":250,"_tipo":"crema","_stock":120},{"_id":4,"_sabor":"frutilla","_precio":600,"_tipo":"agua","_stock":0},{"_id":5,"_sabor":"menta-granizada","_precio":314,"_tipo":"crema","_stock":3}]

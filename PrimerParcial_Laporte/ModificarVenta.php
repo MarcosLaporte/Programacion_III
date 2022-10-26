@@ -5,67 +5,98 @@ contrario informar que no existe ese número de pedido.
 
 Laporte Marcos */
 
-include_once "Venta.php";
-include_once "Helado.php";
+include_once "Clases\\Venta.php";
+include_once "Clases\\Helado.php";
 
-$arrayVentas = ModVenta(LeerDatosJSON("ventas.json"), LeerDatosJSON("heladeria.json"));
-GuardarDatosJSON($arrayVentas, "ventas.json");
+$_arrayVentas = LeerDatosJSON("ventas.json");
+$_arrayHelados = LeerDatosJSON("heladeria.json");
+$_arrayVentas = ModVenta($_arrayVentas, $_arrayHelados);
+GuardarDatosJSON($_arrayVentas, "ventas.json");
 
-
-function ModVenta(array $arrayVentas, array $arrayHelados){
+function ModVenta(array $arrayVentas, array $arrayHelados)
+{
     parse_str(file_get_contents("php://input"), $datos);
     $auxVentas = $arrayVentas;
     $auxHelados = $arrayHelados;
-    
-    $indexVenta = Venta::BuscarVenta($arrayVentas, $datos['numeroDePedido']);
-    if($indexVenta != -1){
-        $fotoNombreViejo = getcwd().'\\ImagenesDeLaVenta\\'.$auxVentas[$indexVenta]->_saborHelado.'_'.$auxVentas[$indexVenta]->_tipoHelado.'_'.explode("@", $auxVentas[$indexVenta]->_mailUsuario)[0].'_'.$auxVentas[$indexVenta]->_fechaPedido.'.jpg';
-        $auxVentas[$indexVenta]->_mailUsuario = ModMail($auxVentas[$indexVenta], $datos['mail']);
-        
-        if(!empty($datos['sabor']) && !empty($datos['tipo'])){
-            $auxHelado = new Helado($datos['sabor'], 0, $datos['tipo'], 0);
-        }else{
-            $auxHelado = $auxVentas[$indexVenta];
+    $numPedido = empty($datos['numeroDePedido']) ? 0 : $datos['numeroDePedido'];
+
+    $indexVenta = Venta::BuscarVenta($arrayVentas, $numPedido);
+    if ($indexVenta != -1) {
+        $venta = $auxVentas[$indexVenta];
+
+        $usuarioViejo = explode("@", $venta->_mailUsuario)[0];
+
+        $fotoNombreViejo = getcwd() . '\\ImagenesDeLaVenta\\' . $venta->_saborHelado .
+            '_' . $venta->_tipoHelado . '_' . $usuarioViejo . '_' . $venta->_fechaPedido . '.jpg';
+
+        #region Verifico los datos ingresados
+        if (Venta::MailValido($datos['mail'])) {
+            $mail = $datos['mail'];
+            $auxVentas[$indexVenta]->_mailUsuario = $mail;
+        } else {
+            $mail = $venta->_mailUsuario;
+            echo "El mail indicado no es válido. Se utilizará el original.\n";
         }
-        
-        $indexHelado = Helado::BuscarHelado($auxHelados, $auxHelado);
-        
-        if($indexHelado != -1){
-            $fotoNombreNuevo = getcwd().'\\ImagenesDeLaVenta\\'.$datos['sabor'].'_'.$datos['tipo'].'_'.explode("@", $auxVentas[$indexVenta]->_mailUsuario)[0].'_'.$auxVentas[$indexVenta]->_fechaPedido.'.jpg';
-            
-            $auxVentas[$indexVenta]->_saborHelado = $datos['sabor'];
-            $auxVentas[$indexVenta]->_tipoHelado = $datos['tipo'];
-            
-            if($auxVentas[$indexVenta]->_stockHelado != $datos['cantidad']){
-                $stockActualizado = $auxHelados[$indexHelado]->_stock + $auxVentas[$indexVenta]->_stockHelado - $datos['cantidad'];
-                if($stockActualizado > 0){
+        $usuarioNuevo = explode("@", $mail)[0];
+
+        if (!empty($datos['sabor'])) {
+            $sabor = $datos['sabor'];
+        } else {
+            $sabor = $venta->_saborHelado;
+            echo "El sabor indicado no es válido. Se utilizará el original.\n";
+        }
+
+        if (!empty($datos['tipo'])) {
+            $tipo = $datos['tipo'];
+        } else {
+            $tipo = $venta->_tipoHelado;
+            echo "El tipo indicado no es válido. Se utilizará el original.\n";
+        }
+
+        if ((int)$datos['cantidad'] >= 0) {
+            $cantidad = (int)$datos['cantidad'];
+        } else {
+            $cantidad = 0;
+        }
+        #endregion
+
+        $indexHelado = Helado::BuscarHelado($auxHelados, new Helado($sabor, 1, $tipo, $cantidad));
+
+        if ($indexHelado != -1) {
+            $fotoNombreNuevo = getcwd() . '\\ImagenesDeLaVenta\\' . $sabor . '_' . $tipo . '_' . $usuarioNuevo . '_' . $venta->_fechaPedido . '.jpg';
+
+            $auxVentas[$indexVenta]->_saborHelado = $sabor;
+            $auxVentas[$indexVenta]->_tipoHelado = $tipo;
+
+            if ($cantidad != $venta->_cantHelado) {
+                $stockActualizado = $auxHelados[$indexHelado]->_stock + $venta->_cantHelado - $cantidad;
+                if ($stockActualizado >= 0) {
                     $auxHelados[$indexHelado]->_stock = $stockActualizado;
-                    $auxVentas[$indexVenta]->_stockHelado = $datos['cantidad'];
-                    echo "La cantidad del pedido ha sido actualizada a " . $datos['cantidad'] . ".\n";
-                }else{
+                    $auxVentas[$indexVenta]->_cantHelado = $cantidad;
+                    echo "La cantidad del pedido ha sido actualizada a " . $cantidad . ".\n";
+                } else {
                     echo "No alcanzan los helados. Seguiremos con la cantidad original.\n";
                 }
             }
             GuardarDatosJSON($auxHelados, "heladeria.json");
-            echo "La venta N°" . $datos['numeroDePedido'] . " fue modificada!\n";
-        }else{
-            echo "No contamos con ese helado específico.";
+            echo "La venta N°$numPedido fue modificada!\n";
+
+            if(strcasecmp($fotoNombreViejo, $fotoNombreNuevo) != 0){
+                rename($fotoNombreViejo, $fotoNombreNuevo);
+            }
+        } else {
+            echo "No contamos con helado de $sabor de $tipo.";
         }
 
-        rename($fotoNombreViejo, $fotoNombreNuevo);
-
-    }else{
-        echo "No existe una venta con número de pedido N°" . $datos['numeroDePedido'] . ".\n";
+    } else {
+        echo "No existe una venta activa con número de pedido N°$numPedido.\n";
         echo "Los disponibles son:\n";
-        foreach($arrayVentas as $ventas){
-            echo '~ ' . $ventas->_numeroPedido . "\n";
+        foreach ($arrayVentas as $venta) {
+            if($venta->_activo)
+                echo '~ ' . $venta->_numeroPedido . "\n";
         }
     }
 
     return $auxVentas;
 }
 
-function ModMail($venta, string $mail){
-    $auxMail = strtolower($mail);
-    return Venta::MailValido($auxMail) ? $auxMail : $venta->_mailUsuario;
-}
