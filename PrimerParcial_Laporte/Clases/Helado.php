@@ -19,7 +19,7 @@ class Helado{
         $precio <= 0 ? $this->_precio = 250 : $this->_precio = $precio;
     }
     public function setTipo(string $tipo){
-        $tipoLwr = strtolower($tipo);
+        $tipoLwr = empty(trim($tipo)) ? "-" : strtolower($tipo);
         if($tipoLwr == "agua" || $tipoLwr == "crema"){
             $this->_tipo = $tipoLwr;
         }else{

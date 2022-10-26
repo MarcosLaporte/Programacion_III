@@ -41,13 +41,12 @@ class CuponDeDescuento
         $archivo = $venta->_saborHelado . '_' . $venta->_tipoHelado . '_' .  $mailSeparado[0] . '_' . $venta->_fechaPedido;
         $destino = "ImagenesDeClientesEnojados/" . $archivo . ".jpg";
         $tmpName = $_FILES["imagen"]["tmp_name"];
-        $ret = false;
 
         if (move_uploaded_file($tmpName, $destino)) {
-            $ret = true;
+            return true;
         }
 
-        return $ret;
+        return false;
     }
 
     public function MostrarCupon()

@@ -11,6 +11,7 @@ class Venta{
     public string $_tipoHelado;
     public int $_cantHelado;
     public string $_fechaPedido;
+    public bool $_activo;
 
     #region Setter
     public function setNumeroPedido(){
@@ -38,7 +39,7 @@ class Venta{
         $this->_cantHelado = $cant <= 0 ? 1 : $cant;
     }
     public function setFecha(string $strFecha){
-        $fecha = DateTime::createFromFormat('d-m-Y', $strFecha) ? $strFecha : new DateTime('now');
+        $fecha = DateTime::createFromFormat('d-m-Y', $strFecha) ?  : new DateTime('now');
         $auxFecha = $fecha <= new DateTime('now') ? $fecha : new DateTime('now');
 
         $this->_fechaPedido = $auxFecha->format('d-m-Y');
@@ -53,6 +54,7 @@ class Venta{
         $this->setTipo($tipoHelado);
         $this->setCantidad($cantHelado);
         $this->setFecha($fechaPedido);
+        $this->_activo = true;
     }
 
     public static function MailValido(string $mail){

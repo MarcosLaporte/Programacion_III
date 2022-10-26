@@ -1,12 +1,12 @@
 <?php
 /* AltaVenta.php: (por POST) se recibe el email del usuario y el Sabor, Tipo y Stock, si el ítem existe en
 heladeria.json, y hay stock guardar en la base de datos( con la fecha, número de pedido y id autoincremental ) .
-Se debe descontar la stock vendida del sto
+Se debe descontar la stock vendida del stock
 
 Laporte Marcos*/
 
-include_once "Helado.php";
-include_once "Venta.php";
+include_once "Clases\\Helado.php";
+include_once "Clases\\Venta.php";
 
 $_arrayVentas = LeerDatosJSON("ventas.json");
 $_arrayVentas = AddVenta(LeerDatosJSON("heladeria.json"), $_arrayVentas);
@@ -26,7 +26,7 @@ function AddVenta(array $arrayHelados, array $arrayVentas){
                 $nuevoStock = $heladoPedido->_stock;
             }else{
                 $nuevoStock = $auxHelados[$indexHelado]->_stock;
-                echo "Cargaremos solo " . $auxHelados[$indexHelado]->_stock . "unidades, ya que es lo que tenemos de ese helado.\n";
+                echo "Cargaremos solo " . $auxHelados[$indexHelado]->_stock . " unidades, ya que es lo que tenemos de ese helado.\n";
             }
             $venta = new Venta($_POST['mail'], $heladoPedido->_sabor, $heladoPedido->_tipo, $nuevoStock, $_POST['fechaPedido']);
             array_push($auxVentas, $venta);
