@@ -27,7 +27,10 @@ switch ($_SERVER['REQUEST_METHOD']) {
         break;
     case 'GET':
         echo "Método GET\n";
-        include_once "ConsultarVentas.php";
+        if (!strcasecmp($_GET['motivo'], 'ventas'))
+            include_once "ConsultarVentas.php";
+        else if (!strcasecmp($_GET['motivo'], 'devoluciones'))
+            include_once "ConsultarDevoluciones.php";
         break;
     case 'PUT':
         echo "Método PUT\n";

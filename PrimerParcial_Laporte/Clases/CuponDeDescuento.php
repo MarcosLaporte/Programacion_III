@@ -1,4 +1,5 @@
 <?php
+include_once "ManejoArchivos.php";
 
 class CuponDeDescuento
 {
@@ -8,22 +9,22 @@ class CuponDeDescuento
     public int $_porcentajeDescuento;
     public string $_estado;
 
-    public function __construct(string $causa)
+    public function __construct(int $devolucionId, string $causa)
     {
-        $this->_id = count(LeerDatosJSON("cupones.json")) + 1;
-        $this->_devolucionId = CuponDeDescuento::NuevoIdDescuento(LeerDatosJSON("cupones.json"));
+        $this->_id = CuponDeDescuento::NuevoId(LeerDatosJSON('cupones.json'));
+        $this->_devolucionId = $devolucionId;
         $this->_causa = empty(trim($causa)) ? 'Distintos sabores' : $causa;
         $this->_porcentajeDescuento = 10;
         $this->_estado = "no usado";
     }
 
-    private static function NuevoIdDescuento(array $arrayCupones)
+    public static function NuevoId(array $arrayCupones)
     {
         $numero = random_int(1000, 9999);
         do {
             $existe = false;
             foreach ($arrayCupones as $cupon) {
-                if ($numero == $cupon->_devolucionId) {
+                if ($numero == $cupon->_id) {
                     $numero = random_int(1000, 9999);
                     $existe = true;
                     break;
@@ -34,24 +35,15 @@ class CuponDeDescuento
         return $numero;
     }
 
-    public static function GuardarImagenClienteEnojado($venta)
+    public static function BuscarCuponActivo(array $cuponesExistentes, int $idCupon)
     {
-        is_dir(getcwd() . '/ImagenesDeClientesEnojados') ?: mkdir(getcwd() . '/ImagenesDeClientesEnojados');
-        $mailSeparado = explode("@", $venta->_mailUsuario);
-        $archivo = $venta->_saborHelado . '_' . $venta->_tipoHelado . '_' .  $mailSeparado[0] . '_' . $venta->_fechaPedido;
-        $destino = "ImagenesDeClientesEnojados/" . $archivo . ".jpg";
-        $tmpName = $_FILES["imagen"]["tmp_name"];
-
-        if (move_uploaded_file($tmpName, $destino)) {
-            return true;
+        for ($i = 0; $i < count($cuponesExistentes); $i++) {
+            if ($idCupon == $cuponesExistentes[$i]->_id &&
+                !strcasecmp($cuponesExistentes[$i]->_estado, "no usado")) {
+                return $i;
+            }
         }
 
-        return false;
-    }
-
-    public function MostrarCupon()
-    {
-        return "Cupón N°" . $this->_devolucionId . " por un " .
-            $this->_porcentajeDescuento ."% de descuento.\nNotas: " . $this->_causa . "\n";
+        return -1;
     }
 }

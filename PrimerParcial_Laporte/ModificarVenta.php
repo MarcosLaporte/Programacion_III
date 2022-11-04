@@ -73,13 +73,15 @@ function ModVenta(array $arrayVentas, array $arrayHelados)
                 if ($stockActualizado >= 0) {
                     $auxHelados[$indexHelado]->_stock = $stockActualizado;
                     $auxVentas[$indexVenta]->_cantHelado = $cantidad;
-                    echo "La cantidad del pedido ha sido actualizada a " . $cantidad . ".\n";
+                    $nuevoPrecio = $cantidad * $auxHelados[$indexHelado]->_precio;
+                    $auxVentas[$indexVenta]->_precioFinal = $nuevoPrecio;
+                    echo "La cantidad del pedido ha sido actualizada a $cantidad y el precio final a $nuevoPrecio.\n";
                 } else {
                     echo "No alcanzan los helados. Seguiremos con la cantidad original.\n";
                 }
             }
-            GuardarDatosJSON($auxHelados, "heladeria.json");
             echo "La venta N°$numPedido fue modificada!\n";
+            GuardarDatosJSON($auxHelados, "heladeria.json");
 
             if(strcasecmp($fotoNombreViejo, $fotoNombreNuevo) != 0){
                 rename($fotoNombreViejo, $fotoNombreNuevo);

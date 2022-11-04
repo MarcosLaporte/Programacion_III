@@ -13,7 +13,8 @@ class Helado{
         $this->_id = count(LeerDatosJSON("heladeria.json"))+1;
     }
     public function setSabor(string $sabor){
-        $this->_sabor = empty(trim($sabor)) ? "chocolate" : strtolower($sabor);
+        $s = str_replace(' ', '-', $sabor);
+        $this->_sabor = empty(trim($s)) ? "chocolate" : strtolower($s);
     }
     public function setPrecio(float $precio){
         $precio <= 0 ? $this->_precio = 250 : $this->_precio = $precio;
@@ -44,15 +45,13 @@ class Helado{
     }
 
     public static function BuscarHelado(array $heladosExistentes, Helado $helado){
-        $ret = -1;
-        foreach($heladosExistentes as $heladoE){
-            if($helado->Equals($heladoE)){
-                $ret = array_search($heladoE, $heladosExistentes);
-                break;
+        for($i = 0; $i < count($heladosExistentes); $i++){
+            if($helado->Equals($heladosExistentes[$i])){
+                return $i;
             }
         }
 
-        return $ret;
+        return -1;
     }
     
     public function GuardarImagenHelado(){

@@ -1,4 +1,5 @@
 <?php
+include_once "ManejoArchivos.php";
 
 class Devolucion
 {
@@ -24,5 +25,16 @@ class Devolucion
         }
 
         return -1;
+    }
+
+    public static function GuardarImagenClienteEnojado($venta)
+    {
+        is_dir(getcwd() . '/ImagenesDeClientesEnojados') ?: mkdir(getcwd() . '/ImagenesDeClientesEnojados');
+        $mailSeparado = explode("@", $venta->_mailUsuario);
+        $archivo = $venta->_saborHelado . '_' . $venta->_tipoHelado . '_' .  $mailSeparado[0] . '_' . $venta->_fechaPedido;
+        $destino = "ImagenesDeClientesEnojados/" . $archivo . ".jpg";
+        $tmpName = $_FILES["imagen"]["tmp_name"];
+
+        return move_uploaded_file($tmpName, $destino);
     }
 }
